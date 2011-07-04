@@ -5,13 +5,13 @@ library(msm)
 
 leks <- 250
 
-fec <- rtnorm(1000, mean=2.5, sd=0, lower=0)
+fec <- rtnorm(1000, mean=1.7, sd=0.25, lower=0)
 
-surv <- rtnorm(1000, mean=0.66, sd=0, lower=0, upper=1)
+surv <- rtnorm(1000, mean=0.66, sd=0.25, lower=0, upper=1)
 
-juv.surv <- rtnorm(1000, mean=0.56, sd=0, lower=0, upper=1)
+juv.surv <- rtnorm(1000, mean=0.56, sd=0.25, lower=0, upper=1)
 
-years <- 10
+years <- 50
 
 K <- 200
 
@@ -49,6 +49,8 @@ meta <- function(N0, d0, f, s, js, years, xy, maxent, p.map, K){
   dispersal <- matrix(0, nrow=length(N0), ncol=years)
   fecundity <- matrix(0, nrow=length(N0), ncol=years)
   chicks <- matrix(0, nrow=length(N0), ncol=years)
+  left <- matrix(0, nrow=length(N0), ncol=years)
+  disp.prop <- matrix(0, nrow=length(N0), ncol=years)
 popn[,1] <- N0
 dispersal[,1] <- d0
 for(i in 2:years-1){
@@ -56,8 +58,8 @@ for(i in 2:years-1){
   for(j in 1:length(N0)){
 	N[j] <- N[j] * (sample(s, 1) * (0.5 + maxent[j]))
 	N[j] <- N[j] + dispersal[j,i] * sample(js, 1)
-	lek.fec <- (sample(f,1)/2)
-   	d.j <- N[j] * lek.fec 
+	lek.fec <- sample(f,1)/2
+   	d.j <- N[j] * lek.fec
     	popn[j,i + 1] <- round(N[j], 0)
     	chicks[j,i] <- round(d.j, 0)
     	fecundity[j,i] <- lek.fec	
@@ -67,7 +69,9 @@ for (k in 2:length(popn[,1])) {
 		p <- SpatialPoints(xy[k,], proj4string=BNG)
 		d <- spDists(p.map, p,longlat=F) 
 		d.which <- which(d < 30000)
-		d.dist <- d[d < 30000]
+  choose.disp <- 1:length(d.which)
+  d.which <- d.which[sample(choose.disp, 15)]
+		d.dist <- d[d.which]+1
 		dist.cont <- sum(d.dist)/d.dist
 		dist.scale <- 1/dist.cont
 		d.count <- popn[d.which,i]
@@ -79,7 +83,17 @@ for (k in 2:length(popn[,1])) {
 		disp <- dist.scale  * d.max + d.count
 		disp <- disp/sum(disp)
 		disp2 <- round(disp * d.fec , 0)
-		disp2[min(disp2)] <- d.fec- sum(disp2)
+    while (sum(disp2) > d.fec){
+      cor.dist <- 1:length(disp2[disp2>0])
+      cor.which <- which(disp2 > 0)
+      x <- sample(cor.dist, 1)
+      x <- cor.which[x]
+      disp2[x] <- disp2[x] -1
+      }
+    if (d.fec-sum(disp2)> 0){
+      dispersal[k, i+1] <- dispersal[k, i+1] + (d.fec - sum(disp2))
+    }
+    left[k, i] <- d.fec- sum(disp2)
 		disp.run[d.which] <- disp2
 		dispersal[,i + 1] <- dispersal[,i + 1] + disp.run
 }
@@ -90,7 +104,7 @@ for (k in 2:length(popn[,1])) {
   n.leks <- as.numeric(summary(n.l)[,1])
   lek.size <- tot.pop/n.leks
   n.chicks <- (tot.chicks/n.leks)/tot.pop
-  return(list(popn=popn, fecundity=fecundity, dispersal=dispersal, chicks=chicks, tot.pop=tot.pop, lek.size=lek.size, n.leks = n.leks, n.chicks=n.chicks))
+  return(list(popn=popn, fecundity=fecundity, dispersal=dispersal, chicks=chicks, tot.pop=tot.pop, lek.size=lek.size, n.leks = n.leks, n.chicks=n.chicks, left=left))
 }
 
 meta.1 <- meta(N0=start.leks, d0=start.disp, f=fec, s=surv, js=juv.surv, maxent=maxent, p.map=p.map, years=years, xy=xy, K=K)
