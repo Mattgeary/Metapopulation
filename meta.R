@@ -60,7 +60,7 @@ for(i in 2:years-1){
 	N[j] <- N[j] + dispersal[j,i] * sample(js, 1)
 	lek.fec <- sample(f,1)/2
    	d.j <- N[j] * lek.fec
-    	popn[j,i + 1] <- round(N[j], 0)
+    	popn[j,i + 1] <- round(N[j], 0) * (1 - N[i]/K)
     	chicks[j,i] <- round(d.j, 0)
     	fecundity[j,i] <- lek.fec	
 }
@@ -103,24 +103,24 @@ for (k in 2:length(popn[,1])) {
   n.l <- apply(popn > 0, 2, which)
   n.leks <- as.numeric(summary(n.l)[,1])
   lek.size <- tot.pop/n.leks
-  n.chicks <- (tot.chicks/n.leks)/tot.pop
+  n.chicks <- tot.chicks/tot.pop
   return(list(popn=popn, fecundity=fecundity, dispersal=dispersal, chicks=chicks, tot.pop=tot.pop, lek.size=lek.size, n.leks = n.leks, n.chicks=n.chicks, left=left))
 }
 
-meta.1 <- meta(N0=start.leks, d0=start.disp, f=fec, s=surv, js=juv.surv, maxent=maxent, p.map=p.map, years=years, xy=xy, K=K)
-
-plot.meta <- function(meta){
-op <- par()
-par(mfrow=c(2,2), ask=T)
-plot(1:ncol(meta$popn), meta$tot.pop, type="b", , xlab="time", ylab="Population size")
-plot(1:ncol(meta$popn), meta$n.leks, type="b",xlab="time", ylab="Number of leks")
-plot(1:ncol(meta$popn), meta$lek.size, type="b",xlab="time", ylab="Mean lek size")
-plot(1:ncol(meta$popn), meta$n.chicks, type="b",xlab="time", ylab="Mean brood size")
-par(mfrow=c(1,1))
-matplot(1:ncol(meta$popn), t(meta.1$dispersal), type="l", ylab="Number of incoming juveniles", xlab="time")
-matplot(1:ncol(meta$popn), t(meta.1$chicks), type="l", ylab="Number of chicks produced", xlab="time")
-matplot(1:ncol(meta$popn), t(meta.1$popn), type="l", ylab="Lek size", xlab="time")
-par(mfrow=c(1,1), ask=F)
-}
-
-plot.meta(meta.1)
+  meta.1 <- meta(N0=start.leks, d0=start.disp, f=fec, s=surv, js=juv.surv, maxent=maxent, p.map=p.map, years=years, xy=xy, K=K)
+  
+  plot.meta <- function(meta){
+  op <- par()
+  par(mfrow=c(2,2), ask=T)
+  plot(1:ncol(meta$popn), meta$tot.pop, type="b", , xlab="time", ylab="Population size")
+  plot(1:ncol(meta$popn), meta$n.leks, type="b",xlab="time", ylab="Number of leks")
+  plot(1:ncol(meta$popn), meta$lek.size, type="b",xlab="time", ylab="Mean lek size")
+  plot(1:ncol(meta$popn), meta$n.chicks, type="b",xlab="time", ylab="Mean brood size")
+  par(mfrow=c(1,1))
+  matplot(1:ncol(meta$popn), t(meta$dispersal), type="l", ylab="Number of incoming juveniles", xlab="time")
+  matplot(1:ncol(meta$popn), t(meta$chicks), type="l", ylab="Number of chicks produced", xlab="time")
+  matplot(1:ncol(meta$popn), t(meta$popn), type="l", ylab="Lek size", xlab="time")
+  par(mfrow=c(1,1), ask=F)
+  }
+  
+  plot.meta(meta.1)
