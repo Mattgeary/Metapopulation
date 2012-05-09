@@ -11,9 +11,9 @@ surv <- rtnorm(1000, mean=0.66, sd=0.25, lower=0, upper=1)
 
 juv.surv <- rtnorm(1000, mean=0.56, sd=0.25, lower=0, upper=1)
 
-years <- 50
+years <- 100
 
-K <- 200
+K <- 40
 
 BNG<- CRS("+init=epsg:27700")
 
@@ -68,7 +68,7 @@ for (k in 2:length(popn[,1])) {
 		disp.run <- rep(0, length(popn[,1]))
 		p <- SpatialPoints(xy[k,], proj4string=BNG)
 		d <- spDists(p.map, p,longlat=F) 
-		d.which <- which(d < 30000)
+		d.which <- which(d < 15000)
   choose.disp <- 1:length(d.which)
   d.which <- d.which[sample(choose.disp, 15)]
 		d.dist <- d[d.which]+1
@@ -76,7 +76,14 @@ for (k in 2:length(popn[,1])) {
 		dist.scale <- 1/dist.cont
 		d.count <- popn[d.which,i]
 		d.males <- chicks[d.which,i]
-		d.count <- sqrt(d.count/2) + 0.001 + d.males
+		d.count <- d.count + d.males
+		d.count <- d.count * (1-d.count/K)
+		for (m in 1:length(d.count)){
+		if (d.count[m] < 0) {
+			d.count[m] <- 0
+			}
+		}
+		d.count <- sqrt(d.count) + 0.001
 		d.count <- d.count/sum(d.count)
 		d.max <- maxent[d.which]
                 d.fec <- chicks[k,i]
@@ -124,3 +131,4 @@ for (k in 2:length(popn[,1])) {
   }
   
   plot.meta(meta.1)
+
