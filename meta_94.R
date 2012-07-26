@@ -2,7 +2,7 @@ meta.94_pop <- data.frame(rep(list(run=numeric(years)), meta.runs))
 meta.94_lek.size <- data.frame(rep(list(run=numeric(years)), meta.runs)) 
 meta.94_n.leks <- data.frame(rep(list(run=numeric(years)), meta.runs)) 
 meta.94_max <- data.frame(rep(list(run=numeric(years)), meta.runs))
-#####! meta.94_max_all <- data.frame(rep(list(run=numeric(leks)), meta.runs)) 
+meta.94_max_all <- data.frame(rep(list(run=numeric(leks)), meta.runs)) 
 
 for (i in 1:meta.runs){
 
@@ -15,7 +15,7 @@ xy <- as.data.frame(xy)
 p.map <- SpatialPoints(xy, proj4string=BNG)
 
 maxent <- extract(map, xy)
-#### ! meta.94_max_all[,i] <- maxent
+meta.94_max_all[,i] <- maxent
 
 leks.rnd <- 1:leks
 which.leks <- sample(leks.rnd, round(leks/6, 0))
@@ -30,7 +30,7 @@ which.disp <- sample(disp.rnd, round(leks/6, 0))
 start.disp <- rep(0, leks)
 start.disp[which.disp] <- round(sample(disp.dist, length(which.leks)), 0)
 
-#####! meta.1 <- meta(N0=start.leks, d0=start.disp, f=fec, surv=surv, js=juv.surv, maxent=maxent, p.map=p.map, years=years, xy=xy, K=K)
+meta.1 <- meta(N0=start.leks, d0=start.disp, f=fec, surv=surv, js=juv.surv, maxent=maxent, p.map=p.map, years=years, xy=xy, K=K)
   
 #plot.meta(meta.1)
 
@@ -43,7 +43,7 @@ meta.94_lek.size[,i] <- meta.1$lek.size
 meta.94_n.leks[,i] <- meta.1$n.leks
 
 meta.94_max[,i] <- meta.1$max.avg
-####!
+
 print(i)
 }
 
