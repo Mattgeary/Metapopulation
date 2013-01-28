@@ -3,7 +3,7 @@ require(raster)
 require(dismo)
 require(msm)
 
-work <- "/home/alan/Work/Metapopulation/New_model"
+work <- "C:/Users/55096693/Work/Metapopulation"
 
 source("meta_control.R", echo=T)
 

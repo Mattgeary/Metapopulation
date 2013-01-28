@@ -36,15 +36,15 @@ meta.1 <- meta(N0=start.leks, d0=start.disp, f=fec, surv=surv, js=juv.surv, maxe
 
 #meta.94_full[[i]] <- meta.1
 
-meta.94_pop[,z] <- meta.1$tot.pop
+meta.94_pop[,i] <- meta.1$tot.pop
 
-meta.94_lek.size[,z] <- meta.1$lek.size
+meta.94_lek.size[,i] <- meta.1$lek.size
 
-meta.94_n.leks[,z] <- meta.1$n.leks
+meta.94_n.leks[,i] <- meta.1$n.leks
 
-meta.94_max[,z] <- meta.1$max.avg
+meta.94_max[,i] <- meta.1$max.avg
 
-print(z)
+print(i)
 }
 
 write.csv(meta.94_pop, "P94_pop.csv",row.names=F)

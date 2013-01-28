@@ -67,7 +67,7 @@ for(i in 2:years-1){
 	N[j] <- N[j] + dispersal[j,i] * sample(js, 1)
 	lek.fec <- sample(f,1)/2
    	d.j <- N[j] * lek.fec
-    	popn[j,i + 1] <- round(N[j], 0) * (1 - N[i]/K)
+    	popn[j,i + 1] <- round(N[j], 0) * abs(1 - N[i]/K)
     	chicks[j,i] <- round(d.j, 0)
     	fecundity[j,i] <- lek.fec
 	if(length(maxent[which(popn[,i] > 0)]) >= 1){
@@ -84,8 +84,9 @@ for (k in 2:length(popn[,1])) {
   choose.disp <- 1:length(d.which)
   d.which <- d.which[sample(choose.disp, (length(choose.disp)*0.4))] # Arbitrary number of leks to disperse to
 		d.dist <- d[d.which]+1
-		dist.cont <- sum(d.dist)/d.dist
-		dist.scale <- 1/dist.cont
+#		dist.cont <- sum(d.dist)/d.dist
+#		dist.scale <- 1/dist.cont
+		dist.scale <- sum(d.dist)/d.dist
 		d.count <- popn[d.which,i]
 		d.males <- chicks[d.which,i]
 		d.count <- d.count + d.males

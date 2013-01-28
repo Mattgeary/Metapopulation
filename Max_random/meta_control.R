@@ -45,6 +45,7 @@ lek.dist <- rtnorm(1000, mean=mean(cp), sd=sd(cp), lower=0) #Create intial distr
 # Define metapopulation function
 ################################
 meta <- function(N0, d0, f, surv, js, years, xy, maxent, p.map, K){
+	l.a <- 1
   popn <- matrix(0, nrow=length(N0), ncol=years)
   dispersal <- matrix(0, nrow=length(N0), ncol=years)
   fecundity <- matrix(0, nrow=length(N0), ncol=years)
@@ -55,28 +56,46 @@ meta <- function(N0, d0, f, surv, js, years, xy, maxent, p.map, K){
 popn[,1] <- N0
 dispersal[,1] <- d0
 if(length(maxent[which(popn[,1] > 0)]) >= 1){
+		print(paste("l.a - type 1", l.a, sep="="))
 		max.avg[1] <- mean(maxent[which(popn[,1] > 0)])
+		
 	} else {
+		print(paste("l.a - type 2", l.a, sep="="))
 		max.avg[1] <- 0
 	}
+l.a <- l.a + 1
 for(i in 2:years-1){
   N <- popn[,i]
+	l.b <- 1
+	l.c <- 1
+	l.d <- 1
   for(j in 1:length(N0)){
+	print(paste("l.b", l.b, sep="="))
+	l.b <- l.b + 1
 	s <- rtnorm(surv$n, mean=(surv$mean*(maxent[j]/max.mean)), sd=surv$sd, lower=surv$lower, upper=surv$upper)
 	N[j] <- N[j] * sample(s, 1)
 	N[j] <- N[j] + dispersal[j,i] * sample(js, 1)
 	lek.fec <- sample(f,1)/2
    	d.j <- N[j] * lek.fec
-    	popn[j,i + 1] <- round(N[j], 0) * (1 - N[i]/K)
+    	popn[j,i + 1] <- round(N[j], 0) * abs(1 - N[i]/K)
     	chicks[j,i] <- round(d.j, 0)
     	fecundity[j,i] <- lek.fec
 	if(length(maxent[which(popn[,i] > 0)]) >= 1){
+		print(paste("l.c - type 1", l.a, sep="="))
 		max.avg[i] <- mean(maxent[which(popn[,i] > 0)])
 	} else {
+		print(paste("l.c - type 2", l.c, sep="="))
 		max.avg[i] <- 0
 	}
+l.c <- l.c + 1
 }
 for (k in 2:length(popn[,1])) {
+		l.e <- 1
+		l.f <- 1
+		l.g <- 1
+		l.h <- 1
+		print(paste("l.d", l.d, sep="="))
+		l.d <- l.d + 1
 		disp.run <- rep(0, length(popn[,1]))
 		p <- SpatialPoints(xy[k,], proj4string=BNG)
 		d <- spDists(p.map, p,longlat=F) 
@@ -91,9 +110,13 @@ for (k in 2:length(popn[,1])) {
 		d.count <- d.count + d.males
 		d.count <- d.count * (1-d.count/K)
 		for (m in 1:length(d.count)){
+		print(paste("l.e", l.e, sep="="))
+		l.e <- l.e + 1
 		if (d.count[m] < 0) {
+			print(paste("l.f", l.f, sep="="))
 			d.count[m] <- 0
 			}
+		l.f <- l.f + 1
 		}
 		d.count <- sqrt(d.count) + 0.001
 		d.count <- d.count/sum(d.count)
@@ -103,6 +126,8 @@ for (k in 2:length(popn[,1])) {
 		disp <- disp/sum(disp)
 		disp2 <- round(disp * d.fec , 0)
     while (sum(disp2) > d.fec){
+	print(paste("l.g - while loop", l.g, sep="="))
+	l.g <- l.g + 1
       cor.dist <- 1:length(disp2[disp2>0])
       cor.which <- which(disp2 > 0)
       x <- sample(cor.dist, 1)
@@ -110,6 +135,7 @@ for (k in 2:length(popn[,1])) {
       disp2[x] <- disp2[x] -1
       }
     if (d.fec-sum(disp2)> 0){
+	print(paste("l.h", l.h, sep="="))
       dispersal[k, i+1] <- dispersal[k, i+1] + (d.fec - sum(disp2))
     }
     left[k, i] <- d.fec- sum(disp2)

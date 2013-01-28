@@ -63,7 +63,7 @@ s <- rtnorm(surv$n, mean=(surv$mean*(maxent[j]/max.mean)), sd=surv$sd, lower=sur
 	N[j] <- N[j] + dispersal[j,i] * sample(js, 1)
 	lek.fec <- sample(f,1)/2
    	d.j <- N[j] * lek.fec
-    	popn[j,i + 1] <- round(N[j], 0) * (1 - N[i]/K)
+    	popn[j,i + 1] <- round(N[j], 0) * abs(1 - N[i]/K)
     	chicks[j,i] <- round(d.j, 0)
     	fecundity[j,i] <- lek.fec	
 	max.avg[i] <- mean(maxent[which(popn[,i] > 0)])

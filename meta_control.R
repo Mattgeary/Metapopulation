@@ -19,11 +19,11 @@ writeRaster(potential, "potential.asc", overwrite=T)
 
 rm(potential)
 
-meta.runs <- 500 #Number of repeat simulations
+meta.runs <- 50 #Number of repeat simulations
 
 leks <- 500 #Initial number of leks
 
-years <- 50 #Length of simulation
+years <- 15 #Length of simulation
 
 K <- 40 #Carrying capacity per lek
 
@@ -67,7 +67,7 @@ for(i in 2:years-1){
 	N[j] <- N[j] + dispersal[j,i] * sample(js, 1)
 	lek.fec <- sample(f,1)/2
    	d.j <- N[j] * lek.fec
-    	popn[j,i + 1] <- round(N[j], 0) * (1 - N[i]/K)
+    	popn[j,i + 1] <- round(N[j], 0) * abs(1 - N[i]/K)
     	chicks[j,i] <- round(d.j, 0)
     	fecundity[j,i] <- lek.fec
 	if(length(maxent[which(popn[,i] > 0)]) >= 1){

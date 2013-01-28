@@ -2,7 +2,7 @@ meta.s2_pop <- data.frame(rep(list(run=numeric(years)), meta.runs))
 meta.s2_lek.size <- data.frame(rep(list(run=numeric(years)), meta.runs)) 
 meta.s2_n.leks <- data.frame(rep(list(run=numeric(years)), meta.runs))
 meta.s2_max <- data.frame(rep(list(run=numeric(years)), meta.runs))
-meta.s2_max_all <- data.frame(rep(list(run=numeric(years)), meta.runs)) 
+meta.s2_max_all <- data.frame(rep(list(run=numeric(leks)), meta.runs)) 
 
 maps <- c(1:5)
 
@@ -19,6 +19,7 @@ xy <- as.data.frame(xy)
 p.map <- SpatialPoints(xy, proj4string=BNG)
 
 maxent <- extract(map, xy)
+meta.s2_max_all[,i] <- maxent
 
 leks.rnd <- 1:leks
 which.leks <- sample(leks.rnd, round(leks/6, 0))
@@ -46,8 +47,6 @@ meta.s2_lek.size[,i] <- meta.1$lek.size
 meta.s2_n.leks[,i] <- meta.1$n.leks
 
 meta.s2_max[,i] <- meta.1$max.avg
-
-meta.s2_max_all[,i] <- meta.1$maxent
 
 print(i)
 }
