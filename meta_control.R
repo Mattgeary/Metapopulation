@@ -11,7 +11,7 @@ potential <- raster("studyareadem.asc", crs=BNG)
 
 rcl.pot <-  matrix(c(-1, 99, NA, 100, 650, 0, 651, 2500, NA), nrow=3, ncol=3, byrow=T)
 
-potential <- reclass(potential, rcl.pot)
+potential <- reclassify(potential, rcl.pot)
 
 potential <- potential + raster("maxent.asc")
 
@@ -23,7 +23,7 @@ meta.runs <- 50 #Number of repeat simulations
 
 leks <- 500 #Initial number of leks
 
-years <- 15 #Length of simulation
+years <- 50 #Length of simulation
 
 K <- 40 #Carrying capacity per lek
 
