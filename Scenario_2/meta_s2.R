@@ -10,7 +10,7 @@ for (i in 1:meta.runs){
 
 sm <- sample(maps,1)
 
-map <- raster(paste("s2_large_map_",sm, ".asc", sep=""), crs=BNG)
+map <- raster(paste("C:/Users/Mgeary/Work/Metapopulation/S2_maps/","s2_large_map_",sm, ".asc", sep=""), crs=BNG)
 
 potential <- raster("potential.asc", crs=BNG)
 

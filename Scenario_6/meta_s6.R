@@ -10,7 +10,7 @@ for (i in 1:meta.runs){
 
 sm <- sample(maps,1)
 
-map <- raster(paste("s6_large_map_",sm, ".asc", sep=""), crs=BNG)
+map <- raster(paste("C:/Users/Mgeary/Work/Metapopulation/S6_maps/","s6_large_map_",sm, ".asc", sep=""), crs=BNG)
 
 potential <- raster("potential.asc", crs=BNG)
 
@@ -54,6 +54,6 @@ print(i)
 write.csv(meta.s6_pop, "Scenario_1_pop.csv", row.names=F)
 write.csv(meta.s6_lek.size, "Scenario_1_lek_size.csv", row.names=F)
 write.csv(meta.s6_n.leks, "Scenario_1_leks.csv", row.names=F)
-write.csv(meta.s1_max, "Scenario_6_max.csv", row.names=F)
-write.csv(meta.s1_max_all, "Scenario_6_max_all.csv", row.names=F)
-save.image("Scenario_1.RData")
+write.csv(meta.s6_max, "Scenario_6_max.csv", row.names=F)
+write.csv(meta.s6_max_all, "Scenario_6_max_all.csv", row.names=F)
+save.image("Scenario_6.RData")
